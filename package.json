@@ -1,11 +1,11 @@
 {
-  "name": "Pre-Entrega-2",
+  "name": "Proyecto Backend Coderhouse / Jose Perez Merino",
   "version": "1.0.0",
   "description": "Pre-Entrega nro 2 Coderhouse",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "NODE_ENV=production node src/app.js",
+    "test": "NODE_ENV=development nodemon src/app.js"
   },
   "keywords": [],
   "author": "",
