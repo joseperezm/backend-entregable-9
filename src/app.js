@@ -3,7 +3,6 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const exphbs = require("express-handlebars");
 const socket = require("socket.io");
-const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
@@ -13,17 +12,10 @@ const cartsRouter = require("./routes/carts.router.js");
 const viewsRouter = require("./routes/views.router.js");
 const sessionsRouter = require('./routes/sessions.router.js');
 const initializePassport = require("./config/passport.config.js");
+const config = require('./config/config.js');
+require("./database.js");
 
 const app = express();
-
-const environment = process.env.NODE_ENV || 'development';
-const envPath = environment === 'development' ? '.env.development' : '.env.production';
-
-require('dotenv').config({ path: envPath });
-
-mongoose.connect(process.env.MONGODB_URI)
-    .then(() => console.log('Conectado a MongoDB'))
-    .catch(err => console.error('Error al conectar a MongoDB', err));
 
 app.use(express.urlencoded({
     extended: true
@@ -36,15 +28,15 @@ app.use(cookieParser());
 const oneWeekLogin = 7 * 24 * 60 * 60;
 
 app.use(session({
-    secret: process.env.SESSION_SECRET,
+    secret: config.SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
     store: MongoStore.create({
-        mongoUrl: process.env.MONGODB_URI,
+        mongoUrl: config.MONGODB_URI,
         ttl: oneWeekLogin
     }),
     cookie: {
-        maxAge: oneWeekLogin * 1000 // milisegundos
+        maxAge: oneWeekLogin * 1000
     }
 }));
 
